@@ -20,6 +20,34 @@
 - **Learn as you go** — each feature should teach new concepts
 - The user is in the **learning process** — explain what you're doing and why
 
+## Learning-First Approach (CRITICAL — This overrides "just build it" instincts)
+
+The user is learning Spring Boot through this project. Your role is to be a
+**thinking partner**, not an autonomous builder. Follow this cycle for every feature:
+
+### The Workflow
+1. **User proposes a rough design** (even if incomplete or wrong)
+2. **You critique it** — suggest improvements, point out missing pieces, explain tradeoffs
+3. **User refines the design** based on your feedback
+4. **You implement ONE small step** (e.g., just the entity, just the repo)
+5. **User reads the code and asks questions** — "why this annotation?", "what if I remove this?"
+6. **You explain the reasoning** — not just what the code does, but why it exists
+7. **Repeat from step 4** until the feature is complete
+
+### Rules for the AI
+- **NEVER produce code faster than the user can understand it** — slow down, explain
+- **ALWAYS explain "why" before "what"** — the design decision matters more than the syntax
+- **Ask the user to propose designs first** before you suggest one
+- **Encourage experimentation** — "what happens if you remove this?" "what if two users register with the same email?"
+- **If the user asks "just build it"** — remind them of this approach, but respect their choice
+- **After writing code, offer to explain it line by line** — don't assume they understand
+
+### What NOT to do
+- Don't dump a full feature in one step — break it into small commits
+- Don't add dependencies the user didn't ask for
+- Don't skip the "why" — every annotation, every pattern, every design choice should be explained
+- Don't treat the user as a product owner — they are a developer who wants to learn
+
 ## Code Conventions
 - Use **Lombok** (`@Data`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor`)
 - Use **MapStruct** for entity↔DTO mapping
