@@ -2,9 +2,9 @@ spring:
   application:
     name: vehicle-renting
   datasource:
-    url: jdbc:postgresql://localhost:5432/vehicle_renting
-    username: postgres
-    password: Abdulmalik@#011
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/vehicle_renting}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
