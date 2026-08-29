@@ -32,7 +32,7 @@ public class UserService {
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.RENTER);
+        user.setRole(request.getRole() != null ? request.getRole() : Role.RENTER);
         user.setWalletBalance(BigDecimal.ZERO);
 
         User savedUser = userRepository.save(user);
