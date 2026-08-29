@@ -1,5 +1,6 @@
 package com.projects.vehicle_renting.dto;
 
+import com.projects.vehicle_renting.model.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,4 +43,11 @@ public class RegisterRequest {
 
     @NotBlank(message = "Phone is required")
     private String phone;
+
+    private Role role;
+
+    @AssertTrue(message = "ADMIN role cannot be assigned during registration")
+    private boolean isRoleValid() {
+        return role == null || role != Role.ADMIN;
+    }
 }
