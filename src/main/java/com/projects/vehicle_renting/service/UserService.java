@@ -22,10 +22,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserResponse register(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new ConflictException("Username already exists");
-        }
-
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new ConflictException("Email already exists");
         }
