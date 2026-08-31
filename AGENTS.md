@@ -61,8 +61,8 @@ The user is learning Spring Boot through this project. Your role is to be a
 | # | Feature | Status |
 |---|---------|--------|
 | 1 | Global Exception Handling | DONE |
-| 2 | User Entity (full stack) | NEXT |
-| 3 | Auth & JWT Security | PENDING |
+| 2 | User Entity (full stack) | DONE |
+| 3 | Auth & JWT Security | NEXT |
 | 4 | Category Entity | PENDING |
 | 5 | Car Entity (search, approval, availability) | PENDING |
 | 6 | Booking (double-booking prevention, lifecycle) | PENDING |
@@ -76,6 +76,26 @@ The user is learning Spring Boot through this project. Your role is to be a
 | 14 | Logging & Monitoring (Actuator) | PENDING |
 | 15 | Testing (Testcontainers) | PENDING |
 | 16 | AI/RAG Integration (capstone) | PENDING |
+
+## Current State & Design Decisions (as of the email-identity refactor)
+- **User Entity (Feature 2) is DONE, merged to main** via feature/register + feature/register-roles.
+- **Email is the sole user identity** — `username` was removed from the codebase AND dropped from the
+  `users` DB column in the `refactor: replace username with email as user identity` commit (branch
+  `refactor/email-identity`, merged).
+- **Role selection at registration:** `RegisterRequest` has an optional `role` field (enum `Role`),
+  defaulting to `RENTER`. `ADMIN` is rejected via an `@AssertTrue` method in the DTO
+  (`isRoleValid()`). Invalid role strings fail JSON-enum deserialization.
+- **One role per account** (flat `role` enum on `users`). Plan for later (Option B): separate
+  `OwnerProfile` / `CompanyProfile` tables referencing `users` 1:1 — **do NOT add owner/company
+  columns to `users` now** to keep that migration easy.
+- **Auth flow is split:** registration in `AuthController` (`POST /api/auth/register`), `UserController`
+  reserved for profile/account later. `LoginRequest`/`LoginResponse` DTOs already exist but are NOT
+  wired up (login is part of Feature 3).
+- **Registration is RENTER/OWNER/COMPANY self-selectable; ADMIN is admin-granted only.**
+- **Password policy:** min 8 chars + regex requiring upper/lower/digit/special; `confirmPassword` +
+  `@AssertTrue isPasswordConfirmed()`.
+- **Validation pattern:** optional/enum fields validated via `@AssertTrue` methods inside DTOs (simple,
+  learning-friendly) rather than reusable class-level validators.
 
 ## SRS Key Requirements
 - **User Roles:** ADMIN, RENTER, OWNER, COMPANY
@@ -92,5 +112,7 @@ The user is learning Spring Boot through this project. Your role is to be a
 1. Read this AGENTS.md first
 2. Check `git log --oneline -10` to see current progress
 3. Check which feature is "NEXT" in the roadmap
-4. Create a feature branch for it
-5. Follow the small-commits workflow
+4. Create a feature branch for the next feature
+5. Check `git stash list` — there may be WIP stashed (e.g., JWT deps in `pom.xml`, `LoginResponse`)
+   that belong to the current/next feature; `git stash pop` to recover if relevant
+6. Follow the small-commits workflow
