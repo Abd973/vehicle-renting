@@ -1,8 +1,6 @@
 package com.projects.vehicle_renting.controller;
 
-import com.projects.vehicle_renting.dto.ApiResponse;
-import com.projects.vehicle_renting.dto.RegisterRequest;
-import com.projects.vehicle_renting.dto.UserResponse;
+import com.projects.vehicle_renting.dto.*;
 import com.projects.vehicle_renting.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthenticationController {
     private final UserService userService;
 
     @PostMapping("/register")
@@ -28,5 +26,14 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("User registered successfully", userResponse));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> login(
+            @Valid @RequestBody LoginRequest request) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success("User logged in successfully"));
     }
 }
