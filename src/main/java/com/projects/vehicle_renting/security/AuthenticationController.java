@@ -1,7 +1,6 @@
-package com.projects.vehicle_renting.controller;
+package com.projects.vehicle_renting.security;
 
 import com.projects.vehicle_renting.dto.*;
-import com.projects.vehicle_renting.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,25 +14,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
-    private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserResponse>> register(
+    public ResponseEntity<ApiResponse<AuthenticationResponse>> register(
             @Valid @RequestBody RegisterRequest request) {
 
-        UserResponse userResponse = userService.register(request);
+        AuthenticationResponse authenticationResponse = authenticationService.register(request);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.success("User registered successfully", userResponse));
+                .body(ApiResponse.success("User registered successfully", authenticationResponse));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(
+    public ResponseEntity<ApiResponse<AuthenticationResponse>> login(
             @Valid @RequestBody LoginRequest request) {
-
+        AuthenticationResponse authenticationResponse = authenticationService.login(request);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApiResponse.success("User logged in successfully"));
+                .body(ApiResponse.success("User logged in successfully", authenticationResponse));
     }
 }
