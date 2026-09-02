@@ -1,38 +1,28 @@
 package com.projects.vehicle_renting.service;
 
-import com.projects.vehicle_renting.dto.RegisterRequest;
 import com.projects.vehicle_renting.dto.UserResponse;
-import com.projects.vehicle_renting.exception.ConflictException;
-import com.projects.vehicle_renting.mapper.UserMapper;
+import com.projects.vehicle_renting.exception.ResourceNotFoundException;
 import com.projects.vehicle_renting.model.User;
-import com.projects.vehicle_renting.model.enums.Role;
 import com.projects.vehicle_renting.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new ConflictException("Email already exists");
-        }
+    public UserResponse getCurrentUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
-        User user = userMapper.toUser(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole() != null ? request.getRole() : Role.RENTER);
-        user.setWalletBalance(BigDecimal.ZERO);
-
-        User savedUser = userRepository.save(user);
-
-        return userMapper.toUserResponse(savedUser);
+        return UserResponse.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .phone(user.getPhone())
+                .role(user.getRole())
+                .walletBalance(user.getWalletBalance())
+                .build();
     }
 }
