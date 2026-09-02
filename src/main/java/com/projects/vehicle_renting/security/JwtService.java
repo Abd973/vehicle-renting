@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +19,10 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${jwt.secret}")
-    private final String SECRET_KEY;
+    private String secretKey;
 
     @Value("${jwt.expiration}")
-    private final long EXPIRATION_TIME;
+    private long expirationTime;
 
 
     public String extractEmail(String token) {
@@ -43,7 +42,7 @@ public class JwtService {
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -72,7 +71,7 @@ public class JwtService {
     }
 
     private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
