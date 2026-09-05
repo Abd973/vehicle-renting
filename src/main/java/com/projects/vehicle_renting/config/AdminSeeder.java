@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +14,6 @@ import java.math.BigDecimal;
 
 @Slf4j
 @Component
-@Profile("dev")
 @RequiredArgsConstructor
 public class AdminSeeder implements CommandLineRunner {
 
