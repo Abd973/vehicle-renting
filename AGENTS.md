@@ -63,8 +63,8 @@ The user is learning Spring Boot through this project. Your role is to be a
 | 1 | Global Exception Handling | DONE |
 | 2 | User Entity (full stack) | DONE |
 | 3 | Auth & JWT Security | DONE |
-| 4 | Brand Entity | NEXT |
-| 5 | Car Entity (search, approval, availability) | PENDING |
+| 4 | Brand Entity | DONE |
+| 5 | Car Entity (search, approval, availability) | NEXT |
 | 6 | Booking (double-booking prevention, lifecycle) | PENDING |
 | 7 | Wallet & Payment (PaymentGateway pattern) | PENDING |
 | 8 | Reviews (both-party feedback) | PENDING |
@@ -134,9 +134,19 @@ The user is learning Spring Boot through this project. Your role is to be a
 - **Profiles deferred** (renter/host onboarding: profile picture, National ID/passport upload, driving
   license, proof of residence, payout method) — captured but NOT being built now (would touch the deferred
   `OwnerProfile`/`CompanyProfile` plan). To be revisited when we add owner/company profiles.
-- **Admin account:** `/register` rejects `ADMIN` (admin-granted only). No admin-seeding mechanism exists
-  yet — need a way to create an ADMIN for testing (decision pending; candidates: SQL insert, a dev-only
-  seed `CommandLineRunner`, or an admin-only provisioning endpoint).
+- **Admin account:** `/register` rejects `ADMIN` (admin-granted only). A dev-time seeding mechanism exists:
+  `config/AdminSeeder.java` — a `CommandLineRunner` that creates an admin if none exists. Uses
+  `admin.email`/`admin.password` config (defaults `admin@vehicle-renting.com` / `Admin@1234`). No
+  `@Profile` guard yet (no profiles exist in the project; revisit when Docker/profiles land).
+- **Brand feature (Feature 4) is DONE, merged to main** via feature/brand. Swapped out the generic
+  `Category` for `Brand` per the product discovery model. Uses a single `BrandDTO` for both request and
+  response (id/createdAt/updatedAt populated only on response). CRUD endpoints under `/api/brands`;
+  write ops guarded with `@PreAuthorize("hasRole('ADMIN')")`. Enabled `@EnableMethodSecurity` in
+  `SecurityConfig` for method-level authorization. DB unique constraint on `brands.name` +
+  service-level `existsByName` check (service → `ConflictException`, DB → backstop).
+- **AccessDenied handling:** `@PreAuthorize` failures throw Spring's `AccessDeniedException`, which is NOT
+  `ForbiddenException`. `GlobalExceptionHandler` maps it to 403 (message: "Access denied: this action
+  requires ADMIN role"). Generic `@ExceptionHandler(Exception.class)` catches anything unhandled → 500.
 
 ## SRS Key Requirements
 - **User Roles:** ADMIN, RENTER, OWNER, COMPANY
