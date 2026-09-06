@@ -112,6 +112,42 @@ For development, `config/AdminSeeder.java` creates an admin on startup if none e
 | PUT | `/api/brands/{id}` | ADMIN | Update brand |
 | DELETE | `/api/brands/{id}` | ADMIN | Delete brand |
 
+## API Usage Examples
+
+Quick curl examples to try the API against a running instance.
+
+**1. Register a renter (auto-login returns a token):**
+
+```bash
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"renter@example.com","password":"Pass@1234","confirmPassword":"Pass@1234","name":"Renter","phone":"01000000001"}'
+```
+
+**2. Login as admin:**
+
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@vehicle-renting.com","password":"Admin@1234"}'
+```
+
+**3. Create a brand (admin only — reuse the token from step 2):**
+
+```bash
+curl -X POST http://localhost:8080/api/brands \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{"name":"Toyota","description":"Japanese automobile manufacturer"}'
+```
+
+**4. List brands (any authenticated user):**
+
+```bash
+curl http://localhost:8080/api/brands \
+  -H "Authorization: Bearer <TOKEN>"
+```
+
 ## Configuration Reference
 
 | Variable | Default | Description |
