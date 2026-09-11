@@ -33,9 +33,11 @@ public class Car {
     private BigDecimal basePricePerDay;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private CarStatus status = CarStatus.PENDING;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean available = true;
 
     @Column(updatable = false)
