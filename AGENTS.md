@@ -134,6 +134,9 @@ The user is learning Spring Boot through this project. Your role is to be a
 - **Profiles deferred** (renter/host onboarding: profile picture, National ID/passport upload, driving
   license, proof of residence, payout method) — captured but NOT being built now (would touch the deferred
   `OwnerProfile`/`CompanyProfile` plan). To be revisited when we add owner/company profiles.
+- **Car photo uploads deferred** (FR-7: owners upload vehicle photos) — decided to build as a standalone
+  feature later: multipart file upload + storage + serving. No photo fields on the `Car` entity or DTOs
+  for now (option chosen over URL-only strings, to do it properly).
 - **Admin account:** `/register` rejects `ADMIN` (admin-granted only). A dev-time seeding mechanism exists:
   `config/AdminSeeder.java` — a `CommandLineRunner` that creates an admin if none exists. Uses
   `admin.email`/`admin.password` config (defaults `admin@vehicle-renting.com` / `Admin@1234`). No
