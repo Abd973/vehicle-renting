@@ -18,7 +18,6 @@ public interface CarMapper {
     @Mapping(target = "updatedAt", ignore = true)
     Car toEntity(CarRequest request);
 
-    @Mapping(target = "brandId", source = "brand.id")
     @Mapping(target = "brandName", source = "brand.name")
     @Mapping(target = "ownerId", source = "owner.id")
     @Mapping(target = "ownerName", source = "owner.name")

@@ -35,8 +35,8 @@ public class CarService {
         if (carRepository.existsByVin(carRequest.getVin())) {
             throw new ConflictException("Car already exists with VIN: " + carRequest.getVin());
         }
-        Brand brand = brandRepository.findById(carRequest.getBrandId())
-                .orElseThrow(() -> new ResourceNotFoundException("Brand", "id", carRequest.getBrandId()));
+        Brand brand = brandRepository.findByNameIgnoreCase(carRequest.getBrandName())
+                .orElseThrow(() -> new ResourceNotFoundException("Brand", "name", carRequest.getBrandName()));
         User owner = resolveOwner(ownerEmail);
         Car car = carMapper.toEntity(carRequest);
         car.setBrand(brand);
