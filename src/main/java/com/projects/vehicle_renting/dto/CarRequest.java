@@ -21,8 +21,8 @@ public class CarRequest {
     @Size(min = 17, max = 17, message = "VIN must be exactly 17 characters")
     private String vin;
 
-    @NotNull(message = "Brand is required")
-    private Long brandId;
+    @NotBlank(message = "Brand name is required")
+    private String brandName;
 
     @NotBlank(message = "Model is required")
     private String model;

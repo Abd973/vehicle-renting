@@ -17,7 +17,6 @@ public class CarResponse {
 
     private Long id;
     private String vin;
-    private Long brandId;
     private String brandName;
     private String model;
     private BigDecimal basePricePerDay;
